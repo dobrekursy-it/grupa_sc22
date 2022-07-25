@@ -2,63 +2,38 @@ const assert = require('assert');
 const { Given, When, Then, setDefaultTimeout } = require('@cucumber/cucumber');
 const {Builder, By} = require('selenium-webdriver');
 setDefaultTimeout(600 * 1000);
-
 let driver = new Builder().forBrowser('chrome').build();
 
-const nazwyKafelkow = [
-  "lewy,górnego",
-  "środkowy,górnego",
-  "prawy,górnego",
-  "lewy,środkowego",
-  "środkowy,środkowego",
-  "prawy,środkowego",
-  "lewy,dolnego",
-  "środkowy,dolnego",
-  "prawy,dolnego",
-];
-
-// pobiera element kafelka z uzyciem selenium
-const pobierzKafelek = (kolumna, rzad) => {
-  let nazwaKafelka = kolumna + ',' + rzad;
-  const numerKafelka = nazwyKafelkow.indexOf(nazwaKafelka);
-  return driver.findElement(By.id("s" + numerKafelka));
+const znajdzKafelek = (rzad, kolumna) => {
+  const numId = ["gorny", "srodkowy", "dolny"].indexOf(rzad) * 3 + ["lewy", "srodkowy", "prawy"].indexOf(kolumna)
+  return By.id('s' + numId);
 }
 
-const podajZnak = (pelnaNazwa) => pelnaNazwa == "kółko" ? "o" : "x"
+const znajdzLitereZnaku = (znak) => {
+  if (znak == "kolkiem") {
+    return "o";
+  }
+  return "x";
+}
 
-Given("gracz uruchomił grę", () => {
+Given('uzytkownik uruchomil', function () {
   driver.get('https://jagusiak.github.io/xo/');
-})
+});
 
-When("gracz klika w {string} kafelek z {string} rzędu", (kolumna, rzad) => {
-  pobierzKafelek(kolumna, rzad).click();
-})
 
-// When('gracz klika w powtórz', async () => {
-//   const element = await driver.findElement(By.className('link'));
-//   await element.click();
-// });
+When('uzytkownik kilknal w {string} {string} kafalek', function (rzad, kolumna) {
+  driver.findElement(znajdzKafelek(rzad, kolumna)).click();
+});
 
-Then('wpisano {string} w {string} kafelek z {string} rzędu', async (oczekiwanyZnak, kolumna, rzad) => {
-  let znak = await pobierzKafelek(kolumna, rzad).getAttribute('data-sign');
-  assert.strictEqual(podajZnak(oczekiwanyZnak), znak);
-})
 
-Then('{string} wygrywa', async (oczekiwanyZnak) => {
-  const element = await driver.findElement( By.id(podajZnak(oczekiwanyZnak) + "-win"));
-  let czyWidac = await element.isDisplayed();
-  assert.strictEqual(true, czyWidac);
-})
+Then('kafalek {string} {string} jest {string}', async function (rzad, kolumna, znak) {
+  // Write code here that turns the phrase above into concrete actions
+  const otrzymanyZnak = await driver.findElement(znajdzKafelek(rzad, kolumna)).getAttribute('data-sign');
+  assert.strictEqual(znajdzLitereZnaku(znak), otrzymanyZnak);
+});
 
-Then('remis', async () => {
-  const element = driver.findElement(By.id('d-win'));
-  const isDisplayed = await element.isDisplayed();
-  assert.strictEqual(true, isDisplayed);
-})
-
-// Then('gra jest pusta', async () => {
-//   for (let i = 0; i < 9; i++) {
-//     const znak = driver.findElement(By.id("s" + i)).getAttribute('data-sign');
-//     assert.strictEqual("", znak);
-//   }
-// })
+Then('kolko wygralo', async function () {
+  // Write code here that turns the phrase above into concrete actions
+  const czyWidoczny = await driver.findElement(By.id('o-win')).isDisplayed()
+  assert.strictEqual(true, czyWidoczny);
+});

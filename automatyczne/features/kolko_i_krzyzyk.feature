@@ -1,48 +1,20 @@
 Feature: Kółko i krzyżyk
+  Scenario: Klikanie w kafelek
+    Given uzytkownik uruchomil
+    When uzytkownik kilknal w "gorny" "prawy" kafalek
+    Then kafalek "gorny" "prawy" jest "kolkiem"
 
-  Scenario: Wpisanie kołka
-    Given gracz uruchomił grę
-    When gracz klika w "lewy" kafelek z "górnego" rzędu
-    Then wpisano "kółko" w "lewy" kafelek z "górnego" rzędu
+  Scenario: Klikanie w dwa kafeleki
+    Given uzytkownik uruchomil
+    When uzytkownik kilknal w "gorny" "prawy" kafalek
+    When uzytkownik kilknal w "srodkowy" "srodkowy" kafalek
+    Then kafalek "srodkowy" "srodkowy" jest "krzyzykiem"
 
-  Scenario: Wpisanie krzyżyka po wpisaniu kółka
-    Given gracz uruchomił grę
-    When gracz klika w "lewy" kafelek z "górnego" rzędu
-    And gracz klika w "środkowy" kafelek z "środkowego" rzędu
-    Then wpisano "krzyżyk" w "środkowy" kafelek z "środkowego" rzędu
-
-  Scenario: Kółko wygrywa
-    Given gracz uruchomił grę
-    When gracz klika w "lewy" kafelek z "górnego" rzędu
-    And gracz klika w "środkowy" kafelek z "górnego" rzędu
-    And gracz klika w "środkowy" kafelek z "środkowego" rzędu
-    And gracz klika w "prawy" kafelek z "środkowego" rzędu
-    And gracz klika w "prawy" kafelek z "dolnego" rzędu
-    Then "kółko" wygrywa
-
-  Scenario: Remis
-    Given gracz uruchomił grę
-    When gracz klika w "lewy" kafelek z "górnego" rzędu
-    And gracz klika w "środkowy" kafelek z "górnego" rzędu
-    And gracz klika w "środkowy" kafelek z "środkowego" rzędu
-    And gracz klika w "prawy" kafelek z "środkowego" rzędu
-    And gracz klika w "prawy" kafelek z "górnego" rzędu
-    And gracz klika w "lewy" kafelek z "dolnego" rzędu
-    And gracz klika w "środkowy" kafelek z "dolnego" rzędu
-    And gracz klika w "prawy" kafelek z "dolnego" rzędu
-    And gracz klika w "lewy" kafelek z "środkowego" rzędu
-    Then remis
-
-#  Scenario: Gra jest zresetowana
-#    Given gracz uruchomił grę
-#    When gracz klika w "lewy" kafelek z "górnego" rzędu
-#    And gracz klika w "środkowy" kafelek z "górnego" rzędu
-#    And gracz klika w "środkowy" kafelek z "środkowego" rzędu
-#    And gracz klika w "prawy" kafelek z "środkowego" rzędu
-#    And gracz klika w "prawy" kafelek z "górnego" rzędu
-#    And gracz klika w "lewy" kafelek z "dolnego" rzędu
-#    And gracz klika w "środkowy" kafelek z "dolnego" rzędu
-#    And gracz klika w "prawy" kafelek z "dolnego" rzędu
-#    And gracz klika w "lewy" kafelek z "środkowego" rzędu
-#    And gracz klika w powtórz
-#    Then gra jest pusta
+  Scenario: Klikanie w dwa kafeleki
+    Given uzytkownik uruchomil
+    When uzytkownik kilknal w "gorny" "prawy" kafalek
+    When uzytkownik kilknal w "srodkowy" "srodkowy" kafalek
+    When uzytkownik kilknal w "srodkowy" "prawy" kafalek
+    When uzytkownik kilknal w "srodkowy" "lewy" kafalek
+    When uzytkownik kilknal w "dolny" "prawy" kafalek
+    Then kolko wygralo
